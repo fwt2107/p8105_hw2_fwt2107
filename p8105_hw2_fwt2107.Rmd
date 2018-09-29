@@ -143,3 +143,29 @@ precip_combined_df <- full_join(precip2016_df, precip2017_df) %>%
 precip_combined_df
 ```
 
+## Data descriptions
+```{r include = F}
+# For Mr. Trash Wheel, filter out observations not from 2016 to make it easier
+# to use inline code to describe attributes of the 2016 cleanup.
+trashwheel_2016_df <- 
+  filter(trashwheel_df, year == '2016') %>% 
+  arrange(sports_balls)
+
+precip_2017_tidied <- filter(precip_combined_df, year == 2017)
+```
+
+The Mr. Trash Wheel dataset contains `r nrow(trashwheel_df)` observations. 
+It contains variables such as the dumpster number, date, and counts of 
+particular items in each dumpster such as sports balls, plastic bags, and
+cigarette butts.
+
+The combined precipitation 2016-2017 dataset contains 
+`r nrow(precip_combined_df)` observations. It contains variables such as the 
+month, year, and amount of precipitation in inches per month. 
+
+Total precipitation in 2017 was `r sum(precip_2017_tidied$total)` inches.
+
+The median number of sports balls in a dumpster in 2016 was 
+`r median(trashwheel_2016_df$sports_balls)`.
+
+
