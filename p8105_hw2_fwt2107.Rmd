@@ -25,5 +25,24 @@ mta_df <- read_csv('./Data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>%
   mutate(entry = ifelse(entry == 'YES', TRUE, FALSE))
 
 mta_df
+View(mta_df)
 ```
 
+This dataset contains information about the entrances for NYC's subway 
+stations. Variables include the route name, station name, station coordinates,
+routes serviced at the station, whether or not the entrance allows entry into
+the station, whether or not the station includes a ticket vending machine,
+the type of entrance (e.g. stairs, door, etc.), and whether or not the 
+entrance is ADA-compliant. 
+
+The resulting dataset is 1868 rows by 19 columns. 
+
+These data are not tidy because the route variable(s) contain 2 pieces of
+information: how many routes are serviced at the particular station, and which
+routes are serviced. Someone could tell visually how many routes and which 
+routes are serviced at a particular station, but determining that information
+in R is not as straightforward given how the data are currently formmated.
+These data could be tidied by creating a variable for the number of routes 
+serviced at each station and creating variables for each possible route 
+(e.g. 'A', '1', 'R', etc.) to indicate if the routes are serviced at each 
+particular station. 
