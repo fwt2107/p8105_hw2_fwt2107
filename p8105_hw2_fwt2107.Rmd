@@ -39,37 +39,60 @@ entrance is ADA-compliant.
 
 The resulting dataset is 1868 rows by 19 columns. 
 
-These data are not tidy because the route variable(s) contain 2 pieces of
-information: how many routes are serviced at the particular station, and which
-routes are serviced. Someone could tell visually how many routes and which 
-routes are serviced at a particular station, but determining that information
-in R is not as straightforward given how the data are currently formmated.
-These data could be tidied by creating a variable for the number of routes 
-serviced at each station and creating variables for each possible route 
-(e.g. 'A', '1', 'R', etc.) to indicate if the routes are serviced at each 
-particular station. 
+These data are not tidy because each row contain 2 pieces of information: 
+how many routes are serviced at the particular station, and which routes are 
+serviced. Someone could tell visually how many routes and which routes are 
+serviced at a particular station, but determining that information in R is 
+not as straightforward given how the data are currently formmated. The data 
+could be tidied by making each row one route. The entry variable could also 
+be reformatted from character to logical for ease of use in analysis.
 
 ## Answering questions
 
-There are 465 distinct stations.
+Only keeping distinct values of line and station_name gives us a dataframe 
+with 465 rows. There are 465 distinct stations.
 ```{r}
 distinct(mta_df, line, station_name, .keep_all = T)
 ```
 
-84 stations are ADA-compliant.
+Keeping distinct values of line and station_name plus filtering out stations
+which weren't ADA-compliant gives us a dataframe with 84 rows. 84 stations 
+are ADA-compliant.
 ```{r}
 distinct(mta_df, line, station_name, .keep_all = T) %>% 
   filter(ada == T)
 ```
 
-There are 183 entrances/exits without vending.
+Filtering out observations for entrances/exits without vending gives us a 
+dataset with 183 rows. There are 183 entrances/exits without vending.
 ```{r}
 filter(mta_df, vending == 'NO')
 ```
 
-There are 69 entrances/exits without vending which allow entrance. Therefore,
-69/183 or about 37.7% of station entrances/exits without vending allow 
-entrance.
+Filtering out entrances/exits without vending and no entry gives us a dataset
+with 69 rows. There are 69 entrances/exits without vending which allow 
+entrance. Therefore, 69/183 or about 37.7% of station entrances/exits without 
+vending allow entrance.
 ```{r}
 filter(mta_df, vending == 'NO', entry == T)
+```
+
+First, we gather the data so that each row corresponds to 1 route. Then we only
+keep the observations for the A route. Finally we keep distinct values of line 
+and station_name to give us a dataframe with 60 rows. 60 distinct stations 
+service the A. 
+```{r}
+gather(mta_df, key = route_num, value = route_name, route1:route11) %>% 
+  filter(route_name == 'A') %>% 
+  distinct(line, station_name, .keep_all = T)
+```
+
+Copying over our most recent pipeline and then filtering out stations which
+are not ADA-compliant gives us a dataframe with 17 rows. 17 distinct stations
+which service the A are ADA-compliant.
+```{r}
+gather(mta_df, key = route_num, value = route_name, route1:route11) %>% 
+  filter(route_name == 'A') %>% 
+  distinct(line, station_name, .keep_all = T) %>% 
+  filter(ada == T)
 ```
