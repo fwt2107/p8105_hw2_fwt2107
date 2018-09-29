@@ -8,6 +8,7 @@ output: github_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(ggridges)
 ```
 
 # Problem 1
@@ -96,3 +97,20 @@ gather(mta_df, key = route_num, value = route_name, route1:route11) %>%
   distinct(line, station_name, .keep_all = T) %>% 
   filter(ada == T)
 ```
+
+# Problem 2
+
+## Mr. Trash Wheel
+```{r}
+trashwheel_df <- 
+  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx', 
+                     range = "A2:N258") %>% 
+  janitor::clean_names() %>%
+  filter(!is.na(dumpster)) %>% 
+  mutate(sports_balls = as.integer(sports_balls))
+  
+trashwheel_df
+
+
+```
+
