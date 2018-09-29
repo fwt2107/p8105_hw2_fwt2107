@@ -7,24 +7,23 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 
-## R Markdown
+# Problem 1
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Reading and cleaning the dataset
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+First, we read in the dataset, clean the variable names, select which 
+variables to keep, and recode entry from a character variable (YES/NO) to a
+logical variable (T/F)
+```{r}
+mta_df <- read_csv('./Data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv') %>% 
+  janitor::clean_names() %>% 
+  select(line, station_name, station_latitude, station_longitude, 
+         route1:route11, entry, vending, entrance_type, ada) %>% 
+  mutate(entry = ifelse(entry == 'YES', TRUE, FALSE))
 
-```{r cars}
-summary(cars)
+mta_df
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
