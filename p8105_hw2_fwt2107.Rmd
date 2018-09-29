@@ -147,6 +147,9 @@ precip_combined_df
 ```{r include = F}
 # For Mr. Trash Wheel, filter out observations not from 2016 to make it easier
 # to use inline code to describe attributes of the 2016 cleanup.
+
+# For precipitation, filter out observations not from 7 to make it easier
+# to use inline code to describe precipitation in 2017.
 trashwheel_2016_df <- 
   filter(trashwheel_df, year == '2016') %>% 
   arrange(sports_balls)
@@ -168,4 +171,16 @@ Total precipitation in 2017 was `r sum(precip_2017_tidied$total)` inches.
 The median number of sports balls in a dumpster in 2016 was 
 `r median(trashwheel_2016_df$sports_balls)`.
 
+# Problem 3
+Load BRFSS data. 
+```{r}
+library(p8105.datasets)
+brfss_df <- brfss_smart2010 %>% 
+  janitor::clean_names() %>% 
+  select(-class, -topic,  -question, -sample_size, 
+         -c(confidence_limit_low:geo_location))
+
+
+brfss_df
+```
 
