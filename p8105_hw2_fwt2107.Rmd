@@ -28,6 +28,8 @@ mta_df
 View(mta_df)
 ```
 
+## Describing the data
+
 This dataset contains information about the entrances for NYC's subway 
 stations. Variables include the route name, station name, station coordinates,
 routes serviced at the station, whether or not the entrance allows entry into
@@ -46,3 +48,28 @@ These data could be tidied by creating a variable for the number of routes
 serviced at each station and creating variables for each possible route 
 (e.g. 'A', '1', 'R', etc.) to indicate if the routes are serviced at each 
 particular station. 
+
+## Answering questions
+
+There are 465 distinct stations.
+```{r}
+distinct(mta_df, line, station_name, .keep_all = T)
+```
+
+84 stations are ADA-compliant.
+```{r}
+distinct(mta_df, line, station_name, .keep_all = T) %>% 
+  filter(ada == T)
+```
+
+There are 183 entrances/exits without vending.
+```{r}
+filter(mta_df, vending == 'NO')
+```
+
+There are 69 entrances/exits without vending which allow entrance. Therefore,
+69/183 or about 37.7% of station entrances/exits without vending allow 
+entrance.
+```{r}
+filter(mta_df, vending == 'NO', entry == T)
+```
