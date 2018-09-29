@@ -101,6 +101,9 @@ gather(mta_df, key = route_num, value = route_name, route1:route11) %>%
 # Problem 2
 
 ## Mr. Trash Wheel
+First we read in the data. Then we clean the variable names, filter out rows
+which are not for specific dumpsters, and change the sports_ball variable into
+integer. 
 ```{r}
 trashwheel_df <- 
   readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx', 
@@ -110,7 +113,33 @@ trashwheel_df <-
   mutate(sports_balls = as.integer(sports_balls))
   
 trashwheel_df
+```
 
+## Precipitation 2016 and 2017
 
+First we read in the precipitation 2016 and 2017 data, and then we clean the
+variable names, add a year variable, and filter out rows with no rain data.
+```{r}
+precip2016_df <- 
+  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+                     sheet = '2016 Precipitation', range = 'A2:B14') %>% 
+  janitor::clean_names() %>% 
+  mutate(year = 2016)
+precip2016_df
+
+precip2017_df <-
+  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+                     sheet = '2017 Precipitation', range = 'A2:B14') %>% 
+  janitor::clean_names() %>% 
+  mutate(year = 2017) %>% 
+  filter(!is.na(total))
+```
+
+We combine the precipitation datasets and convert month to a character
+variable.
+```{r}
+precip_combined_df <- full_join(precip2016_df, precip2017_df) %>% 
+  mutate(month = month.name[month])
+precip_combined_df
 ```
 
