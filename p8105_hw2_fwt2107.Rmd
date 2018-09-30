@@ -172,15 +172,23 @@ The median number of sports balls in a dumpster in 2016 was
 `r median(trashwheel_2016_df$sports_balls)`.
 
 # Problem 3
-Load BRFSS data. 
+Load BRFSS data. We clean the variable names, then we filter out observations
+unrelated to the "Overall Health" question. Then we exclude most of the 
+variables in the dataset. We spread the response variable out as variables
+excellent, very good, good, fair, and poor with data_value as their values. We 
+cleaned the variable names again after spreading the response variable.
 ```{r}
 library(p8105.datasets)
 brfss_df <- brfss_smart2010 %>% 
+  janitor::clean_names() %>%
+  filter(topic == "Overall Health") %>% 
+  select(-class, -topic,  -question, -sample_size,
+          -c(confidence_limit_low:geo_location)) %>%
+  spread(key = response, value = data_value) %>% 
   janitor::clean_names() %>% 
-  select(-class, -topic,  -question, -sample_size, 
-         -c(confidence_limit_low:geo_location))
-
+  mutate(prop_great_health = excellent + very_good)
 
 brfss_df
+head(brfss_df$prop_great_health)
 ```
 
