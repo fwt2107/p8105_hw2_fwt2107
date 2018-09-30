@@ -172,11 +172,16 @@ The median number of sports balls in a dumpster in 2016 was
 `r median(trashwheel_2016_df$sports_balls)`.
 
 # Problem 3
+## Cleaning data
 Load BRFSS data. We clean the variable names, then we filter out observations
 unrelated to the "Overall Health" question. Then we exclude most of the 
 variables in the dataset. We spread the response variable out as variables
 excellent, very good, good, fair, and poor with data_value as their values. We 
-cleaned the variable names again after spreading the response variable.
+cleaned the variable names again after spreading the response variable. Created
+the variable prop_great_health for the proportion of responses which were either
+excellent or very good. Separated locationdesc variable into a variable for the
+state and a variable for the location name. Deleted the unneccessary
+locationabbr variable afterwards.
 ```{r}
 library(p8105.datasets)
 brfss_df <- brfss_smart2010 %>% 
@@ -186,9 +191,31 @@ brfss_df <- brfss_smart2010 %>%
           -c(confidence_limit_low:geo_location)) %>%
   spread(key = response, value = data_value) %>% 
   janitor::clean_names() %>% 
-  mutate(prop_great_health = excellent + very_good)
+  mutate(prop_great_health = excellent + very_good) %>% 
+  separate(locationdesc, into = c('state', 'location'), sep = ' - ') %>% 
+  select(-locationabbr)
 
 brfss_df
-head(brfss_df$prop_great_health)
+```
+
+## Answering questions
+There are 2125 unique locations in the dataset because there are 2125 rows of
+data. There are 51 unique values for the state variable in the brfss dataset,
+indicating that every state and DC are represnted.
+
+Using the count(), we can see how frequently each state appears in the dataset.
+New Jersey is the most observed state with 146 observations.
+```{r}
+length(unique(brfss_df$state))
+count(brfss_df, brfss_df$state) %>% 
+  arrange(desc(n))
+```
+
+
+```{r}
+brfss2002_df <- filter(brfss_df, year == 2002) %>% 
+  arrange(excellent)
+brfss2002_df
+median(brfss2002_df$excellent, na.rm = T)
 ```
 
