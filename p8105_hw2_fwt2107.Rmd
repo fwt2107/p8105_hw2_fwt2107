@@ -211,11 +211,33 @@ count(brfss_df, brfss_df$state) %>%
   arrange(desc(n))
 ```
 
-
+We take a subset of the brfss data for only observations from 2002. The median 
+of the excellent response value in 2002 is 23.6.
 ```{r}
 brfss2002_df <- filter(brfss_df, year == 2002) %>% 
   arrange(excellent)
-brfss2002_df
 median(brfss2002_df$excellent, na.rm = T)
+```
+
+We create a histogram of the values for excellent from all 2002 observations.
+```{r}
+excellent02_hist <- ggplot(brfss2002_df, aes(excellent)) + 
+  geom_histogram()
+excellent02_hist
+```
+
+We create a scatterplot of the proportion of excellent responses in New York
+County and Queens County for the time period 2002-2010. First we create a 
+dataset with only observations from the 2 counties. Then we create the 
+scatterplot. The scatterplot shows that for every year in the period 2002-2010, 
+New York County reports larger excellent response values compared to Queens
+County.
+```{r}
+nyc_df <- filter(brfss_df, 
+                 location == "New York County" | location == "Queens County")
+
+nyc_scatter <- ggplot(nyc_df, aes(x = year, y = excellent, color = location)) +
+  geom_point()
+nyc_scatter
 ```
 
