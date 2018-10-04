@@ -106,8 +106,8 @@ which are not for specific dumpsters, and change the sports_ball variable into
 integer. 
 ```{r}
 trashwheel_df <- 
-  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx', 
-                     range = "A2:N258") %>% 
+  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2018-7-28.xlsx', 
+                     range = "A2:N338") %>% 
   janitor::clean_names() %>%
   filter(!is.na(dumpster)) %>% 
   mutate(sports_balls = as.integer(sports_balls))
@@ -121,14 +121,14 @@ First we read in the precipitation 2016 and 2017 data, and then we clean the
 variable names, add a year variable, and filter out rows with no rain data.
 ```{r}
 precip2016_df <- 
-  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',
                      sheet = '2016 Precipitation', range = 'A2:B14') %>% 
   janitor::clean_names() %>% 
   mutate(year = 2016)
 precip2016_df
 
 precip2017_df <-
-  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2017-9-26.xlsx',
+  readxl::read_excel('./Data/HealthyHarborWaterWheelTotals2018-7-28.xlsx',
                      sheet = '2017 Precipitation', range = 'A2:B14') %>% 
   janitor::clean_names() %>% 
   mutate(year = 2017) %>% 
